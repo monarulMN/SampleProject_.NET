@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FirstWebApp.Data;
 using FirstWebApp.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FirstWebApp.Controllers
 {
@@ -31,6 +32,12 @@ namespace FirstWebApp.Controllers
             return View();
         }
 
+        // Post: Jokes/ShowSearchResults
+        public async Task<IActionResult> ShowSearchResults(String SearchPhrase)
+        {
+            return View("Index", await _context.Joke.Where(j=>j.JokeQuestion.Contains(SearchPhrase)).ToListAsync());
+        }
+
         // GET: Jokes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -50,6 +57,7 @@ namespace FirstWebApp.Controllers
         }
 
         // GET: Jokes/Create
+       
         public IActionResult Create()
         {
             return View();
@@ -58,6 +66,7 @@ namespace FirstWebApp.Controllers
         // POST: Jokes/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,JokeQuestion,JokeAnswer")] Joke joke)
